@@ -7,6 +7,13 @@ public class Player extends GameEntity{
     @Override
     public void draw(GraphicsContext g) {
         g.setFill(Color.BLACK);
-        g.fillOval(this.x, this.y, 50, 50);
+        g.fillOval(this.position.x, this.position.y, 50, 50);
+    }
+
+    public Bullet shoot() {
+        Bullet b = new Bullet(new Vec2D(0,-5));
+        b.position.x = this.position.x + 20;
+        b.position.y = this.position.y;
+        return b;
     }
 }

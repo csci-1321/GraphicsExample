@@ -7,6 +7,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -23,12 +25,14 @@ public class GameGraphics extends Application{
         ArrayList<GameEntity> allEntities = new ArrayList<GameEntity>();
 
         Enemy enemy1 = new Enemy();
-        enemy1.x = 300;
-        enemy1.y = 300;
+        enemy1.position.x = 300;
+        enemy1.position.y = 100;
+        enemy1.force.x = 2;
+        enemy1.force.y = 0;
         //enemy1.draw(g);
         Player p = new Player();
-        p.x = 100;
-        p.y = 100;
+        p.position.x = 275;
+        p.position.y = 500;
 
         allEntities.add(enemy1);
         allEntities.add(p);
@@ -39,14 +43,27 @@ public class GameGraphics extends Application{
             public void handle(long now) {
                 g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
                 for(GameEntity ge : allEntities) {
-                    if(ge instanceof Enemy) {
-                        ge.x += 1;
-                    }
                     ge.draw(g);
                 }
             }
             
         };
+
+        canvas.setOnKeyPressed((KeyEvent k ) -> {
+            if (k.getCode().equals(KeyCode.LEFT)) {
+                if (p.position.x >= 10) {
+                    p.position.x -= 5;
+                }
+            }
+            if (k.getCode().equals(KeyCode.RIGHT)) {
+                if (p.position.x < canvas.getWidth()-60) {
+                    p.position.x += 5;
+                }
+            }
+            if (k.getCode().equals(KeyCode.SPACE)) {
+                allEntities.add(p.shoot());
+            }
+        });
         canvas.requestFocus();
         timer.start();
         
