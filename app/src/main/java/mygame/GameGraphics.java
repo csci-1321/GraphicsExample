@@ -16,23 +16,27 @@ import javafxintro.Clicks;
 
 public class GameGraphics extends Application{
 
+    private ArrayList<GameEntity> allEntities = new ArrayList<GameEntity>();
+
     @Override
     public void start(Stage primaryStage) {
         Canvas canvas = new Canvas(600,600);
         Scene scene = new Scene(new StackPane(canvas));
         GraphicsContext g = canvas.getGraphicsContext2D();
 
-        ArrayList<GameEntity> allEntities = new ArrayList<GameEntity>();
-
         Enemy enemy1 = new Enemy();
         enemy1.position.x = 300;
         enemy1.position.y = 100;
         enemy1.force.x = 2;
         enemy1.force.y = 0;
+        enemy1.size.x = 50;
+        enemy1.size.y = 50;
         //enemy1.draw(g);
         Player p = new Player();
         p.position.x = 275;
         p.position.y = 500;
+        p.size.x = 50;
+        p.size.y = 50;
 
         allEntities.add(enemy1);
         allEntities.add(p);
@@ -42,6 +46,7 @@ public class GameGraphics extends Application{
             @Override
             public void handle(long now) {
                 g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                handleCollisions();
                 for(GameEntity ge : allEntities) {
                     ge.draw(g);
                 }
@@ -72,4 +77,24 @@ public class GameGraphics extends Application{
         primaryStage.show();
     }
     
+    private void handleCollisions() {
+        ArrayList<GameEntity> toDelete = new ArrayList<GameEntity>();
+        for (GameEntity orig : allEntities) {
+            for (GameEntity collided : allEntities) {
+                if (!orig.equals(collided)) {
+                    //checkCollision();
+                    if (orig instanceof Collidable && collided instanceof Collidable) {
+                        boolean isCollision = ((Collidable) orig).checkCollision(collided);
+                        if (isCollision) {
+                            ((Collidable) orig).onCollision(collided);
+                            if (orig instanceof Bullet) toDelete.add(orig);
+                        }
+                    }
+                }
+            }
+        }
+        for (GameEntity del : toDelete) {
+            allEntities.remove(del);
+        }
+    }
 }
