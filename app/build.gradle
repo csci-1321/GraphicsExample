@@ -32,7 +32,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'mygame.GameGraphics'
+    mainClass = 'collections.TextAnalysis'
 }
 
 tasks.named('test') {
