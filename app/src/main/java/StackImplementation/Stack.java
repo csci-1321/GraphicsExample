@@ -1,4 +1,5 @@
 package StackImplementation;
+import java.util.EmptyStackException;
 
 public class Stack <T> {
     private T[] elems;
@@ -19,11 +20,13 @@ public class Stack <T> {
         elems[top++] = e;
     }
 
-    public T pop() {
+    public T pop() throws EmptyStackException {
+        if (isEmpty()) throw new EmptyStackException();
         return elems[--top];
     }
 
-    public T peek() {
+    public T peek() throws EmptyStackException {
+        if (isEmpty()) throw new EmptyStackException();
         return elems[top-1];
     }
 

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import StackImplementation.Stack;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.*;
 
 class StackTest {
     @Test void initializeStack() {
@@ -34,12 +35,19 @@ class StackTest {
 
     @Test void pushManyElements() {
         Stack<String> s = new Stack<String>();
-        String[] words = {"First","Second","Third","Fourth","Fifth","Sixth","Seventh","Eighth","Ninth","Tenth","Eleventh"};
+        String[] words = {"First","Second","Third","Fourth","Fifth","Sixth","Seventh","Eighth","Ninth","Tenth","Eleventh", 
+            "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"};
         for (String str : words) 
             s.push(str);
 
-        for (int i = 10; i >= 0 ; --i) {
+        for (int i = words.length-1; i >= 0 ; --i) {
             assertEquals(words[i], s.pop());
         }
+    }
+
+    @Test void popEmptyStack() {
+        Stack<String> s = new Stack<String>();
+        assertThrows(EmptyStackException.class, () -> s.pop());
+        assertThrows(EmptyStackException.class, () -> s.peek());
     }
 }
