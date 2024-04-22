@@ -1,11 +1,11 @@
 package StackImplementation;
 
-public class ListQueue <T> {
+public class PriorityQueue <T extends Comparable> {
     private int size;
     private Node<T> head, tail;
     
     @SuppressWarnings("unchecked")
-    public ListQueue() {
+    public PriorityQueue() {
         size = 0;
         head = null;
         tail = null;
@@ -18,9 +18,23 @@ public class ListQueue <T> {
             head = newNode;
             tail = newNode;
         } else {
-            Node<T> newNode = new Node<T>(e, tail,null);
-            tail.next = newNode;
-            tail = newNode;
+            // find new node's place in list
+            // start at tail
+            Node<T> rover = tail;
+            while (rover.data.compareTo(e) < 0) {
+                rover = rover.prev;
+                if (rover == null) break;
+            }
+
+            if (rover != null) {
+                Node<T> newNode = new Node<T>(e, rover,rover.next);
+                rover.next = newNode;
+                newNode.next.prev = newNode;
+            } else {
+                Node<T> newNode = new Node<T>(e, null,head);
+                head.prev = newNode;
+                head = newNode;
+            }
         }
 
         ++size;
